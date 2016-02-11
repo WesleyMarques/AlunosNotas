@@ -1,0 +1,17 @@
+---
+title: "notasAlunos"
+output: html_document
+---
+
+
+
+```{r}
+alunos <- read.csv2("data/alunosUFCGAnon.csv")
+alunos
+```
+
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
