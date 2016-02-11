@@ -1,13 +1,39 @@
 ---
-title: "notasAlunos"
+title: "Notas Alunos - UFCG"
+author: Wesley Nunes
+date: January 15, 2016
 output: html_document
 ---
 
+# Introdução
+### Análise das notas dos Alunos da Universidade Federal de Campina Grande(UFCG)
 
+Este Documento tem a finalidade de analisar as notas dos cursos da UFCG verificando desempenho e relações entre elas.
+
+> Conhecendo as variáveis relacionadas aos alunos
+
+* **Variáveis**
+    + Matricula: Número de matrícula
+    + Cod_Curso: Código do curso
+    + Cod_Disciplina: Código da disciplina cursada
+    + Cod_Evasao: 0 se o aluno nao evadiu ao fim do primeiro periodo e 1 se ele evadiu
+    + Nome_Curso: Nome do Curso
+    + Periodo: Período cursado
+    + Nome_Disciplina: Nome da disciplina cursada 
+    + Creditos: Créditos da disciplina
+    + Departamento: Nome do departamento
+    + Media_Disciplina: Média obtida na Disciplina
+    + Situacao: Status ao na disciplina(Aprovado, Reprovado, Em curso)
+    + Centro: Centro acadêmico
+    + Campus: Localidade do Campus
+    + Creditos_Curso:  total de créditos necessários para o aluno concluir o curso
+    + Tipo: Tipo da disciplina cursada(Obrigatória, Optativa ...)
+    + Periodo_Ingresso: Período em que a cadeira foi cursada
+    + Periodo_Relativo: Total de períodos do alunos ao longo do curso
 
 ```{r}
-alunos <- read.csv2("data/alunosUFCGAnon.csv")
-alunos
+#alunos <- read.csv2(unz("data/data.zip", "alunosUFCGAnon.csv"))
+#alunos
 ```
 
 
