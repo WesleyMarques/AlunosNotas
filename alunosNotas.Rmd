@@ -31,13 +31,38 @@ Este Documento tem a finalidade de analisar as notas dos cursos da UFCG verifica
     + Periodo_Ingresso: Período em que a cadeira foi cursada
     + Periodo_Relativo: Total de períodos do alunos ao longo do curso
 
-```{r}
-#alunos <- read.csv2(unz("data/data.zip", "alunosUFCGAnon.csv"))
-#alunos
-```
+> Parte 1
 
-
+### Há algo surpreendente ou estranho nos dados?
 ```{r, echo=FALSE}
-plot(cars)
+library(dplyr)
+alunos <- read.csv(unz("/home/wesley/workspaceR/AlunosNotas/data/data.zip","alunosUFCGAnon.csv"))
+medianByCourse <- aggregate(alunos$Media_Disciplina, by=list(alunos$Nome_Curso), FUN=median,na.rm=T)
+medianByPeriodic <- aggregate(alunos$Media_Disciplina, by=list(alunos$Periodo), FUN=median,na.rm=T);
+meanByCourse <- aggregate(alunos$Media_Disciplina, by=list(alunos$Nome_Curso), FUN=mean,na.rm=T);
+```
+Sabendo que a mediana é uma operação mais confiável que a média para análise de dispersão dos dados, isso nós podemos perceber pelo gráfico abaixo, pois verificamos que há diferença na disperção, fazendo com que a média não mostre a verdadeira realidade dos cursos, pois há um grande intervalo entre as notas. Outro fato interessante é na consistência dos dados, causando erro na análise devido a valores inválidos nos campos de notas. Isso é causando quando um aluno tranca a disciplina, com isso não se pode avaliar o evento deste aluno de cursar a disciplina.
+```{r}
+boxplot(meanByCourse$x, medianByCourse$x, names = c("Média dos cursos", "Mediana dos cursos"))
 ```
 
+Com o gráfico de disperção abaixo, podemos identificar a grande diferença das notas, causando outlier com valores outside, mostrados no boxsplot acima. Sabendo disso, a mediana será uma medida mais confiável para analisar os dados. Também podemos observar o quão desproporcional, estão alguns cursos, enquanto grande parte dos curso se concentram com valores >= 7, apenas 8 cursos estão fora da normalidade da mediana da universidade. Isso se torna algo estranho e que se deve analisar o porque deste ocorrido.
+
+```{r}
+plot(medianByCourse$x, main="Scatterplot das medianas por curso", xlab = "Disciplinas", ylab = "Medianas")
+plot(sort(medianByCourse$x), main="Scatterplot das medianas ordenadas por curso", xlab = "Cursos", ylab = "Medianas")
+
+```
+
+> Parte 2
+
+### Em qual curso e em qual período estão as melhores e piores notas?
+
+Como foi definido o uso da mediana para análise dos cursos, podemos ver na consulta abaixo que os valore com maiores e menores médias são os de DIREITO - M e ESTATÍSTICA - D, respectivamente.
+
+```{r}
+maxM <- max(medianByCourse$x)
+minM <- min(medianByCourse$x)
+medianByCourse[medianByCourse$x == maxM,]
+medianByCourse[medianByCourse$x == minM,]
+```
