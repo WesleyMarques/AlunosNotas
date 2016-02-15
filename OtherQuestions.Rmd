@@ -1,0 +1,11 @@
+---
+title: "OtherQuestions"
+author: "Wesley Nunes Marques Torres / 112210480"
+date: "January 16, 2016"
+output: html_document
+---
+```{r, echo=FALSE}
+library(dplyr)
+filePath <- file.choose();
+alunos <- read.csv(unz(filePath,"alunosUFCGAnon.csv"))
+```

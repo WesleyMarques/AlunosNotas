@@ -36,7 +36,8 @@ Este Documento tem a finalidade de analisar as notas dos cursos da UFCG verifica
 ### Há algo surpreendente ou estranho nos dados?
 ```{r, echo=FALSE}
 library(dplyr)
-alunos <- read.csv(unz("/home/wesley/workspaceR/AlunosNotas/data/data.zip","alunosUFCGAnon.csv"))
+filePath <- file.choose();
+alunos <- read.csv(unz(filePath,"alunosUFCGAnon.csv"))
 medianByCourse <- aggregate(alunos$Media_Disciplina, by=list(alunos$Nome_Curso), FUN=median,na.rm=T)
 medianByPeriodic <- aggregate(alunos$Media_Disciplina, by=list(alunos$Periodo), FUN=median,na.rm=T);
 meanByCourse <- aggregate(alunos$Media_Disciplina, by=list(alunos$Nome_Curso), FUN=mean,na.rm=T);
