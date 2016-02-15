@@ -1,7 +1,7 @@
 ---
 title: "Notas Alunos - UFCG"
-author: Wesley Nunes
-date: January 15, 2016
+author: "Wesley Nunes Marques Torres / 112210480"
+date: "January 15, 2016"
 output: html_document
 ---
 
@@ -65,4 +65,43 @@ maxM <- max(medianByCourse$x)
 minM <- min(medianByCourse$x)
 medianByCourse[medianByCourse$x == maxM,]
 medianByCourse[medianByCourse$x == minM,]
+```
+
+Após uma avaliação podemos observar que, a maioria dos período que obtiveram melhores notas foram os primeiros períodos dos anos, com excessão dos períodos 2012.2 e 2013.2.
+
+```{r}
+print(medianByPeriodic[medianByPeriodic$x == max(medianByPeriodic$x),])
+```
+
+### Por que você acha que isso acontece em cada caso?
+
+Isso ocorre devido ao uso da análise pela mediana, que nos diz que, pelas medianas, tanto nos piores e melhores cursos como nos períodos, metade dos alunos alcançam as notas associadas. Como isso, podemos inferir esses resultados das questões avaliadas.
+
+```{r, echo=F}
+medianByCourse <- aggregate(alunos$Media_Disciplina, by=list(alunos$Nome_Curso), FUN=median,na.rm=T)
+```
+
+> Parte 3
+
+### Quão desiguais são os notas entre os cursos e os períodos como um todo? Há cursos mais desiguais?
+
+
+Fazendo uso do boxsplot, podemos verifica a existência de um pequeno grupo de cursos com uma desigualdade em relação a um outro grupo que estão agrupados de forma que estão dentro de um pequeno intervalo. No caso dos períodos, podemos verificar a presença de outlier, isso se verificarmos a proporção dos grupos, porém a diferença entre os períodos do que possui a menor mediana para o maior é de apenas 0.20
+
+```{r}
+boxplot(medianByCourse$x, ylab = "Mediana dos cursos")
+boxplot(medianByPeriodic$x, ylab = "Mediana dos Período")
+```
+
+> Parte 4
+
+### Quais unidades acadêmicas estão mais correlacionadas em relação às notas dos alunos?
+
+Verificando a mediana de todos os alunos, com a mediana por centro acadêmico, se verifica que UNID. ACAD. DE EDUCAÇÃO DO CAMPO com 7.6 é o centro que mais se aproxima dos alunos.
+
+
+```{r}
+unidade <- aggregate(alunos$Media_Disciplina, by=list(alunos$Departamento), FUN=median,na.rm=T)
+medianAll <- median(alunos$Media_Disciplina, na.rm = T)
+unidade[unidade$x == medianAll,]
 ```
