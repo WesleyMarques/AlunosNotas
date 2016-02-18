@@ -9,3 +9,22 @@ library(dplyr)
 filePath <- file.choose();
 alunos <- read.csv(unz(filePath,"alunosUFCGAnon.csv"))
 ```
+
+# Perguntas a serem respondidas
+### Análise das notas dos Alunos da Universidade Federal de Campina Grande(UFCG)
+
+Neste Documentos Foram respondidas duas perguntas sobre o conjunto de dados dos alunos. Que são:
+
+* O índice de desistência está relacionado com a média das notas do curso?
+* Qual período possui maior e menor índice de desistência?
+
+> O índice de desistência está relacionado com a média das notas do curso?
+
+Para se avaliar o índice de desistência se faz necessário antes de tudo, identificar onde esta informação está inserida no conjunto de dados, logo, temos a coluna de código de evasão, que é 0 - A
+
+
+```{r}
+tabela_evasao <- alunos %>% group_by(Nome_Curso, Cod_Evasao) %>% summarise(size_evasao = length(Cod_Evasao == 1))
+tabela_evasao <- filter(tabela_evasao, Cod_Evasao == 1)
+tabela_mediana <- alunos %>% group_by(Nome_Curso) %>% summarise(mediana = median(Media_Disciplina, na.rm = T))
+```
