@@ -1,7 +1,7 @@
 ---
-title: "OtherQuestions"
-author: "Wesley Nunes Marques Torres / 112210480"
-date: "January 16, 2016"
+title: "Análise de evasão na UFCG"
+author: "Wesley Nunes Marques Torres "
+date: "January 18, 2016"
 output: html_document
 ---
 ```{r, echo=FALSE}
@@ -20,11 +20,40 @@ Neste Documentos Foram respondidas duas perguntas sobre o conjunto de dados dos 
 
 > O índice de desistência está relacionado com a média das notas do curso?
 
-Para se avaliar o índice de desistência se faz necessário antes de tudo, identificar onde esta informação está inserida no conjunto de dados, logo, temos a coluna de código de evasão, que é 0 - A
+Para se avaliar o índice de desistência se faz necessário antes de tudo, identificar onde esta informação está inserida no conjunto de dados, logo, temos a coluna de código de evasão, que é 0 para não abandono e 1 para abandono. Uma forma clara de se identificar isso é pela comparação da mediana de evasão com a mediana dos cursos.
 
+Como existe dados repetidos de metículas, temos primeiramente que agurpar todas as matrículas, pois só assim teremos o número exato de abandonos. Para ser mais justo, será avaliado a proporção de alunos por curso.
+
+Após todo um tratamento de dados, podemos verificar que existe uma relação entre mediana e evasão, pois, quanto menor a mediana do curso, maior será a evasão do curso, como está descrito no gráfico de dispersão abaixo.
 
 ```{r}
-tabela_evasao <- alunos %>% group_by(Nome_Curso, Cod_Evasao) %>% summarise(size_evasao = length(Cod_Evasao == 1))
-tabela_evasao <- filter(tabela_evasao, Cod_Evasao == 1)
-tabela_mediana <- alunos %>% group_by(Nome_Curso) %>% summarise(mediana = median(Media_Disciplina, na.rm = T))
+table_group_alunos <- alunos %>% group_by(Matricula, Nome_Curso, Cod_Evasao) %>% summarise(cod_evasao = length(Cod_Evasao))
+alunos_evasao <- filter(table_group_alunos, Cod_Evasao == 1)
+
+size_por_curso <- alunos %>% group_by(Nome_Curso) %>% summarise(size_alunos = length(Matricula))
+
+evasao_por_curso <- alunos_evasao %>% group_by(Nome_Curso) %>% summarise(size_evasao = length(Matricula)) 
+
+mediana_cursos <- alunos %>% group_by(Nome_Curso) %>% summarise(mediana_curso = median(Media_Disciplina, na.rm = T))
+
+tabela_evasao_mediana <- select(merge(merge(mediana_cursos,size_por_curso), evasao_por_curso), Nome_Curso, mediana_curso, size_evasao,size_alunos)
+```
+
+```{r}
+plot(tabela_evasao_mediana$mediana_curso, (tabela_evasao_mediana$size_evasao/tabela_evasao_mediana$size_alunos)*100, type = "p", col = "blue", ylab = "Nº de evasão(%)", xlab = "Mediana por curso")
+```
+
+
+> Qual período possui maior e menor índice de desistência?
+
+Para isso, temos que avaliar o número de desistência em cada período. Antes de tudo, assim como foi feito acima, será usado a proporção de alunos por período. Com isso, no grágico abaixo, vemos que a maior proporção de evasão do curso estão no período de 2012.1 com aproximadamente 10% de evasão. O que possui menor índice de evasão é o período 2006.1, com aproximadamente 3% de evasão.
+
+```{r}
+tabela_evasao <- alunos %>% group_by(Periodo, Cod_Evasao) %>% summarise(size_evasao = length(Cod_Evasao))
+evasaoPorPeriodo <- filter(tabela_evasao, Cod_Evasao == 1)
+
+size_por_periodo <- alunos %>% group_by(Periodo) %>% summarise(size_alunos = length(Matricula))
+
+tabela_evasao_periodo = merge(evasaoPorPeriodo, size_por_periodo)
+plot(tabela_evasao_periodo$Periodo, (tabela_evasao_periodo$size_evasao/tabela_evasao_periodo$size_alunos)*100, type = "h", col = "red", ylab = "Nº de evasão(%)", xlab = "Período")
 ```
